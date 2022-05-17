@@ -1,0 +1,95 @@
+create table faculty (fid int primary key, fname varchar(20), qualification varchar(20));
+create table course (cid int primary key, cname varchar(20), cduration int, fee float);
+create table student (sid int, sname varchar(20), gender varchar(1), doj varchar(20), bid int, cid int);
+create table batch (bid int, start_date date, end_date date, fid int references faculty(fid), cid int references course(cid));
+
+ 
+
+insert into student values(1, 'Marc', 'M', 'a', 1, 1);
+insert into student values(2, 'Mac', 'M', 'a', 2, 2);
+insert into student values(3, 'ASTHA', 'F', 'a', 3, 3);
+insert into student values(4, 'Elia', 'M', 'a', 4, 4);
+
+ 
+
+insert into course values (10, 'Science', 90, 6000);
+insert into course values (20, 'mathematics', 120, 4000);
+insert into course values (30, 'history', 120, 300);
+insert into course values (40, 'philosophy', 120, 200);
+insert into course values (50, 'mathematics 2', 120, 4500);
+
+ 
+
+insert into faculty values(1000, 'Medicin', 'Doctor');
+insert into faculty values(1002, 'Geography', 'MBA.2');
+insert into faculty values(1004, 'Oxford', 'MS');
+
+ 
+
+insert into batch values (1, '10-jun-21', '10-jun-25', 1000, 10);
+insert into batch values (2, '10-jun-21', '10-jun-25', 1000, 10);
+insert into batch values (3, '15-jun-20', '15-jun-24', 1000, 20);
+insert into batch values (4, '15-jun-20', '15-jun-24', 1000, 10);
+insert into batch values (4, '15-jun-10', '15-jun-14', 1002, 10);
+insert into batch values (2, '15-jun-10', '15-jun-14', 1002, 10);
+insert into batch values (3, '15-jun-10', '15-jun-14', 1002, 10);
+insert into batch values (1, '11-jan-13', '11-jan-17', 1004, 20);
+insert into batch values (null, '11-jan-13', '11-jan-17', 1004, 20);
+
+ 
+
+select * from faculty
+
+select a.sid, a.sname, a.gender, a.doj, a.bid, a.cid
+from student a left join batch b on a.bid = b.bid 
+where b.start_date = (select b.start_date from batch b join student a on a.bid = b.bid where a.sname = 'ASTHA')
+
+ 
+
+select a.sid, a.sname, a.gender, a.doj, a.bid, a.cid
+from student a left join batch b on a.bid = b.bid left join faculty c on b.fid = c.fid
+where c.qualification = 'MBA.2'
+
+ 
+
+select a.sid, a.sname, a.gender, a.doj, a.bid, a.cid
+from student a left join batch b on a.bid = b.bid
+where b.end_date < sysdate-90
+
+ 
+
+select * from batch b join faculty c on b.fid = c.fid
+join course d on b.cid = d.cid
+where d.fee > 5000 or c.qualification = 'MS'
+
+ 
+
+select * from batch b join student a on a.bid = b.bid
+where b.start_date = '11-jan-13'
+
+ 
+
+ 
+
+update course c 
+set fee = fee*1.1
+where (select count(b.bid), b.start_date from batch b group by b.start_date) > 5
+
+ 
+
+update course c 
+set c.fee = c.fee*1.1
+where
+    (select count(b.bid), b.start_date, c.cname from batch b join course c on b.cid = c.cid
+    group by b.start_date, c.cname
+    having count(b.bid)>1
+    order by b.start_date)
+    
+    
+    
+delete from batch 
+where bid is null
+
+ 
+
+select * from course

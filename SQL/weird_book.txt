@@ -1,0 +1,99 @@
+CREATE TABLE Book(
+BookID INT PRIMARY KEY,
+Title varchar(30),
+AuthorName varchar(30),
+PRICE FLOAT
+);
+
+CREATE TABLE Publisher(
+PubID INT PRIMARY KEY,
+PubName varchar(30),
+BookID INT,
+CONSTRAINT  FK_BookID FOREIGN KEY (BookID) 
+        REFERENCES Book(BookID) 
+);
+
+
+ALTER TABLE Book
+ADD PUBID INT;
+
+ALTER TABLE Book
+ADD FOREIGN KEY (PubID) REFERENCES publisher(PubID);
+
+
+INSERT INTO Book(BookID, Title, AuthorName, PRICE)
+VALUES(111, 'Risks', 'Davison', 45.5);
+
+INSERT INTO Book(BookID, Title, AuthorName, PRICE)
+VALUES(231, 'NLP', 'Zhu', 11.5);
+
+INSERT INTO Book(BookID, Title, AuthorName, PRICE)
+VALUES(531, 'SQL', 'Fabien', 89.45);
+
+INSERT INTO Publisher(PubID, PUbName, BookID)
+VALUES(1, ' Statistics', 111);
+
+INSERT INTO Publisher(PubID, PUbName, BookID)
+VALUES(11, ' TNW publishers', 531);
+
+INSERT INTO Publisher(PubID, PUbName, BookID)
+VALUES(12, 'Machine Learning', 231);
+
+INSERT INTO Publisher(PubID, PUbName, BookID)
+VALUES(14, 'Tata Group', 531);
+
+INSERT INTO Publisher(PubID, PUbName, BookID)
+VALUES(17, 'Pirlo', 531);
+
+INSERT INTO Publisher(PubID, PUbName)
+VALUES(32, 'Pirlo');
+
+UPDATE Book
+SET PubID = 1
+WHERE BookID=111;
+
+UPDATE Book
+SET PubID = 12
+WHERE BookID=231;
+
+UPDATE Book
+SET PubID = 14
+WHERE BookID=531;
+
+INSERT INTO Book(BookID, Title, AuthorName, PRICE, PubID)
+VALUES(453, 'SQL Vol2', 'Fabien', 34.5, 11);
+
+
+INSERT INTO Book(BookID, Title, AuthorName, PRICE, PubID)
+VALUES(455, 'SQL Vol3', 'Fabien', 34.5, 11);
+
+INSERT INTO Book(BookID, Title, AuthorName, PRICE, PubID)
+VALUES(189, 'Adv Stats', 'Oli', 103, 1);
+
+SELECT Title, Price
+FROM Book;
+
+SELECT Title, Price
+FROM Book 
+WHERE PubID = 1;
+
+SELECT Title, Price, PubName
+FROM Book
+RIGHT JOIN Publisher
+ON Book.PubID = Publisher.PubID
+WHERE PUBNAME = ' TNW publishers';
+
+SELECT PubName
+FROM Publisher
+WHERE BookID IS NULL;
+
+SELECT COUNT(*), PUBNAME
+FROM Publisher
+GROUP BY PUBNAME;
+
+SELECT Price, PubName
+FROM Book
+RIGHT JOIN Publisher
+ON Book.PubID = Publisher.PubID
+WHERE PRICE = (SELECT MAX(PRICE) FROM BOOK);
+

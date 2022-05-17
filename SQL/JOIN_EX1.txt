@@ -1,0 +1,102 @@
+CREATE TABLE Employee(
+empid INT PRIMARY KEY,
+firstname varchar(20),
+lastname varchar(20),
+salary int, 
+department varchar(20)
+);
+
+CREATE TABLE Shift(
+shiftcode int primary key, 
+shiftname varchar(20),
+starttime float,
+endtime float
+);
+
+CREATE TABLE Swipes(
+empid REFERENCES Employee(empid), 
+shiftcode REFERENCES Shift(shiftcode), 
+swipedate DATE, 
+intime float,
+outtime float
+);
+
+insert into employee(empid, firstname, lastname, salary, department)
+values (12, 'bob', 'schwartz', 1200, 'IT');
+
+insert into employee(empid, firstname, lastname, salary, department)
+values (13, 'paul', 'schwartz', 2200, 'DS');
+
+insert into employee(empid, firstname, lastname, salary, department)
+values (14, 'ANITHA', 'schwartz2', 200, 'HR');
+
+insert into employee(empid, firstname, lastname, salary, department)
+values (18, 'PAblo', 'schwartz2', 200, 'HR');
+
+insert into shift(shiftcode, shiftname, starttime, endtime)
+values (101, 'card', 12.5, 16.5);
+
+insert into shift(shiftcode, shiftname, starttime, endtime)
+values (104, 'card', 9.5, 11.5);
+
+insert into shift(shiftcode, shiftname, starttime, endtime)
+values (108, 'card', 18.5, 20.5);
+
+insert into swipes(empid, shiftcode, swipedate, intime, outtime)
+Values (12, 101, '10-Jan-13', 9.5, 11.5);
+
+insert into swipes(empid, shiftcode, swipedate, intime, outtime)
+Values (12, 104, '10-Jan-13', 16.5, 20.5);
+
+insert into swipes(empid, shiftcode, swipedate, intime, outtime)
+Values (14, 108, '15-Jan-13', 12.5, 20.5);
+
+insert into swipes(empid, shiftcode, swipedate, intime, outtime)
+Values (13, 104, '10-Mar-13', 9.5, 20.5);
+
+select a.empid,  a.firstname || ' ' || a.lastname fullname, b.shiftcode, b.swipedate
+from Employee a
+left join Swipes b
+ON a.empid = b.empid
+WHERE b.swipedate = '10-Jan-13';
+
+select a.empid, a.firstname || ' ' || a.lastname fullname, a.department
+from employee a
+join employee c On
+a.empid=c.empid
+where a.department = (SELECT department from employee where firstname = 'ANITHA');
+
+select a.empid, a.firstname, b.swipedate, b.intime, b.outtime
+from employee a
+left join swipes b 
+on a.empid = b.empid
+
+select a.shiftname, count(b.empid)
+from shift a
+join swipes b
+on a.shiftcode=b.shiftcode;
+
+
+select a.shiftname, count (b.shiftcode)
+from shift a 
+left join swipes b
+on a.shiftcode = b.shiftcode
+where b.swipedate = '10-Jan-13';
+group by shiftname;
+
+select a.empid, a.firstname, b.shiftcode, b.shiftname
+from employee a
+left join swipes c
+on a.empid= c.empid
+left join shift b
+on c.shiftcode = b.shiftcode
+where c.swipedate ='10-Jan-13';
+
+insert into employee(empid, firstname)
+values (132, 'strunz');
+
+select a.empid, a.firstname, b.shiftcode, b.swipedate
+from employee a
+left join swipes b
+on a.empid= b.empid
+where a.lastname is NULL;

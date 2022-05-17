@@ -1,0 +1,95 @@
+CREATE SEQUENCE seq_person
+MINVALUE 1
+START WITH 1
+INCREMENT BY 1
+CACHE 10;
+
+ 
+
+CREATE TABLE Customer ( 
+    CustomerID INT , 
+    Customer_Name varchar2(25) NOT NULL, 
+    Customer_City varchar2(20), 
+    ZipCode varchar2(9), 
+    PRIMARY KEY(CustomerID) 
+)
+
+ 
+
+CREATE TABLE OrderTable( 
+    OrderID int PRIMARY KEY, 
+    Order_Date DATE, 
+    Bill_Amount int, 
+    CustomerID int NOT NULL, 
+    CONSTRAINT  FK_CUSTOMER FOREIGN KEY (CUstomerID) 
+        REFERENCES Customer(CustomerID) 
+)
+
+ 
+
+INSERT INTO Customer (CustomerID, Customer_Name, Customer_City, ZipCode)  
+VALUES (seq_person.nextval, 'Tom B. Erichsen', 'Geneva', '1206')
+
+ 
+
+INSERT INTO Customer (CustomerID, Customer_Name, Customer_City, ZipCode)  
+VALUES (seq_person.nextval, 'Marc Ourfali', 'Zurich', '8050')
+
+ 
+
+INSERT INTO Customer (CustomerID, Customer_Name, Customer_City, ZipCode)  
+VALUES (seq_person.nextval, 'Tom', 'Lausanne', '1022')
+
+ 
+
+INSERT INTO Customer (CustomerID, Customer_Name, Customer_City, ZipCode)  
+VALUES (seq_person.nextval, 'Tom', 'Luzern', '7056')
+
+ 
+
+INSERT INTO OrderTable (OrderID, Order_Date, Bill_amount, CustomerID) 
+VALUES (2008, '12-Mar-2020', 123, 1)
+
+ 
+
+INSERT INTO OrderTable (OrderID, Order_Date, Bill_amount, CustomerID) 
+VALUES (2012, '24-Mar-2020', 324, 2)
+
+ 
+
+INSERT INTO OrderTable (OrderID, Order_Date, Bill_amount, CustomerID) 
+VALUES (2045, '30-Apr-2020', 12, 1)
+
+ 
+
+INSERT INTO OrderTable (OrderID, Order_Date, Bill_amount, CustomerID) 
+VALUES (3012, '12-Mar-2020', 123, 3)
+
+SELECT * FROM Customer
+
+SELECT * FROM OrderTable
+WHERE CustomerID = 1
+
+SELECT * FROM OrderTable
+WHERE Order_Date = '12-Mar-2020'
+
+SELECT * FROM Customer 
+WHERE Customer_CITY LIKE 'S%'
+
+SELECT ORDERID, CUSTOMERID FROM OrderTable
+WHERE Bill_Amount BETWEEN 100 AND 500
+
+SELECT COUNT(CustomerID), Order_Date
+FROM OrderTable
+GROUP BY Order_Date;
+
+SELECT COUNT(CustomerID), CustomerID
+FROM OrderTable
+GROUP BY CustomerID;
+
+UPDATE Customer
+SET Zipcode = '1208'
+WHERE Customer_city = 'Geneva';
+
+
+SELECT * FROM Customer

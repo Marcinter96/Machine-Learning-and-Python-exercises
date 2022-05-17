@@ -1,0 +1,52 @@
+Create Table Building (
+    Building_Id int PRIMARY KEY,
+    Building_Name varchar(20),
+    LocationA varchar(20),
+    Color varchar(10)
+);
+
+Create Table Room (
+    Room_No int PRIMARY KEY,
+    Floor_No int,
+    No_Of_Bed int,
+    Rent int,
+    Building_Id,
+    CONSTRAINT  FK_Building FOREIGN KEY (Building_Id) 
+        REFERENCES Building(Building_Id) 
+);
+
+INSERT INTO Building (Building_Id, Building_Name, LocationA, Color)
+VALUES (12, 'Prime Tower', 'Zurich', 'blue');
+
+INSERT INTO Building (Building_Id, Building_Name, LocationA, Color)
+VALUES (32, 'Duomo', 'Milan', 'red');
+
+INSERT INTO Building (Building_Id, Building_Name, LocationA, Color)
+VALUES (42, 'Torre Rotta', 'New York', 'green');
+
+INSERT INTO Building (Building_Id, Building_Name, LocationA, Color)
+VALUES (4, 'Getto', 'Geneva', 'orange');
+
+INSERT INTO Room(Room_No, Floor_No, No_Of_Bed, Rent, Building_ID)
+VALUES (12, 11, 2, 1300, 12)
+
+INSERT INTO Room(Room_No, Floor_No, No_Of_Bed, Rent, Building_ID)
+VALUES (35, 14, 2, 2300, 12)
+
+INSERT INTO Room(Room_No, Floor_No, No_Of_Bed, Rent, Building_ID)
+VALUES (10, 1, 3, 1800, 4)
+
+INSERT INTO Room(Room_No, Floor_No, No_Of_Bed, Rent, Building_ID)
+VALUES (11, 7, 2, 1300, 32)
+
+Select COUNT(Room_No), Building_ID 
+FROM Room
+GROUP BY  Building_ID;
+
+SELECT Room_No, Building_ID, Rent
+FROM Room
+WHERE Rent = (SELECT MAX(Rent) FROM ROOM);
+
+Select COUNT(No_Of_Bed)
+From Room
+where No_Of_Bed = 2;

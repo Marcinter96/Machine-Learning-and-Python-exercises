@@ -1,0 +1,129 @@
+/* Creating the needed table */
+
+create table faculty (fid int primary key, fname varchar(20), qualification varchar(20));
+create table course (cid int primary key, cname varchar(20), cduration int, fee float);
+create table student (sid int, sname varchar(20), gender varchar(1), doj varchar(20), bid int, cid int);
+create table batch (bid int, start_date date, end_date date, fid int references faculty(fid), cid int references course(cid));
+
+ 
+/* insert the values in each table*/
+insert into student values(1, 'Marc', 'M', 'a', 1, 1);
+insert into student values(2, 'Mac', 'M', 'a', 2, 2);
+insert into student values(3, 'ASTHA', 'F', 'a', 3, 3);
+insert into student values(4, 'Elia', 'M', 'a', 4, 4);
+/* for the courses*/
+insert into course values (10, 'Science', 90, 6000);
+insert into course values (20, 'mathematics', 120, 4000);
+insert into course values (30, 'history', 120, 300);
+insert into course values (40, 'philosophy', 120, 200);
+insert into course values (50, 'mathematics 2', 120, 4500);
+/* for the faculties*/
+insert into faculty values(1000, 'Medicin', 'Doctor');
+insert into faculty values(1002, 'Geography', 'MBA.2');
+insert into faculty values(1004, 'Oxford', 'MS');
+/* for the batches*/
+insert into batch values (1, '10-jun-21', '10-jun-25', 1000, 10);
+insert into batch values (2, '10-jun-21', '10-jun-25', 1000, 10);
+insert into batch values (3, '15-jun-20', '15-jun-24', 1000, 20);
+insert into batch values (4, '15-jun-20', '15-jun-24', 1000, 10);
+insert into batch values (null, '11-jan-13', '11-jan-17', 1004, 20);
+
+select * from faculty
+
+/*. Write a query to display the details of those students who joined on the same date along with 
+student whose name is ASTHA.
+
+Need to join in the subquerie as well as start_date in different table then student name*/
+select a.sid, a.sname, a.gender, a.doj, a.bid, a.cid
+from student a left join batch b on a.bid = b.bid 
+where b.start_date = (select b.start_date from batch b join student a on a.bid = b.bid where a.sname = 'ASTHA')
+
+/* Adding new student for complexity*/
+
+insert into batch values (4, '15-jun-10', '15-jun-14', 1002, 10);
+insert into batch values (2, '15-jun-10', '15-jun-14', 1002, 10);
+insert into batch values (3, '15-jun-10', '15-jun-14', 1002, 10);
+insert into batch values (1, '11-jan-13', '11-jan-17', 1004, 20);
+ 
+
+
+/* Write a query to display the details of students who belong to the batches handled by the 
+faculty whose qualification is MBA.2
+
+Subqueries not needed as faculty info given*/
+select a.sid, a.sname, a.gender, a.doj, a.bid, a.cid
+from student a left join batch b on a.bid = b.bid left join faculty c on b.fid = c.fid
+where c.qualification = 'MBA.2'
+
+/* Write a query to display the details of the faculty members who did not take any batch in the 
+last 3 months.
+
+Iterate through dates with sysdate*/
+select a.sid, a.sname, a.gender, a.doj, a.bid, a.cid
+from student a left join batch b on a.bid = b.bid
+where b.end_date < sysdate-90
+
+ /*Write a query to display the details of batches which are handled by the faculty whose 
+qualification is MS or if the course fee is more than 5000.
+
+If information in multiple tables do multiple joins, SELECT * give value of first join*/
+
+select * from batch b join faculty c on b.fid = c.fid
+join course d on b.cid = d.cid
+where d.fee > 5000 or c.qualification = 'MS'
+
+/*. Write a query to display the details of students whose batch start date is '11-jan-13*/
+
+select * from batch b join student a on a.bid = b.bid
+where b.start_date = '11-jan-13'
+
+
+/* Write a query to increase the course fee by 10% if more than 5 batches have started for that 
+course.
+
+Dont forget to have a comparison on where with an in function to get the batch info)*/
+update Course
+set fee = fee*1.1
+where Course.cid in
+(select Batch.cid
+from Batch
+group by Batch.cid
+having count(Batch.cid) > 3
+)
+
+/*Write a query to remove the batches where there are no students available.
+*/
+    
+delete from batch 
+where bid is null
+
+/*Write a query to display the course name and fee for the fifth highest course fee.
+
+Use DESC OFFSET N-1 ROWS, FETCH FIRST ONLY to get the N highest value
+alternative solution in MYSQL might be SELECT DISTINCT top N*/
+ select c.cname, c.fee
+ from course c
+ ORDER BY fee DESC OFFSET 3 ROWS
+FETCH FIRST ROW ONLY
+
+/* Write a query to display the course names whose fee is more than any course whose duration 
+is 30.
+*/
+select c.cname
+from course c
+where c.fee > (SELECT MAX(fee) from course where cduration >90)
+
+select c.cname, c.fee from course c
+where c.fee > (select max(c.fee) from course c where c.cduration = 120)
+
+/*  Write a query to create a table new_course from the existing course table of those courses 
+whose duration is 45
+
+Dont forget the aliases when creating the tables*/
+
+create table new_course as
+SELECT *
+FROM Course
+WHERE cduration >90
+
+select * from new_course

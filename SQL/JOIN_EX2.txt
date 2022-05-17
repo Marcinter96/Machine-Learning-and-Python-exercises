@@ -1,0 +1,92 @@
+CREATE TABLE PRODUCT(
+prod_code int primary key, 
+prod_name varchar(20),
+price int, 
+manufacturer varchar(20)
+);
+
+
+CREATE TABLE BOX(
+box_code int primary key, 
+box_contents varchar(20), 
+box_value int, 
+prod_code references product(prod_code));
+
+insert into product(prod_code, prod_name, price, manufacturer)
+values (12, 'mazda', 240, 'IKEA');
+
+insert into product(prod_code, prod_name, price, manufacturer)
+values (35, 'twix', 2, 'IKEA');
+
+insert into product(prod_code, prod_name, price, manufacturer)
+values (45, 'honda', 504, 'TOTO');
+
+insert into product(prod_code, prod_name, price, manufacturer)
+values (1, 'bear', 35, 'TATA');
+
+insert into box(box_code,box_contents ,box_value , prod_code)
+values (101, 'cars', 800, 12);
+
+insert into box(box_code,box_contents ,box_value , prod_code)
+values (102, 'cars', 801, 45);
+
+insert into box(box_code,box_contents ,box_value , prod_code)
+values (181, 'candy', 11, 35);
+
+insert into box(box_code,box_contents ,box_value , prod_code)
+values (121, 'animal', 23, 1);
+
+SELECT a.prod_code, a.prod_name, a.price, b.box_contents
+From product a
+join box b
+on a.prod_code = b.prod_code;
+
+SELECT count(a.prod_name), b.box_contents
+From product a
+join box b
+on a.prod_code = b.prod_code
+group by b.box_contents;
+
+insert into product(prod_code, prod_name, price, manufacturer)
+values (211, 'IT', 3500, 'monitor');
+
+select *
+from product
+where manufacturer = 'monitor';
+
+
+SELECT a.prod_code, a.prod_name, a.price, b.box_contents
+From product a
+left join box b
+on a.prod_code = b.prod_code;
+
+
+SELECT a.prod_code, a.prod_name, a.price, b.box_contents, b.box_value
+From product a
+join box b
+on a.prod_code = b.prod_code;
+
+insert into box(box_code,box_contents ,box_value)
+values (111, 'cc', 801);
+
+insert into box(box_code,box_contents ,box_value)
+values (234, 'dd', 11);
+
+insert into box(box_code,box_contents ,box_value )
+values (334, 'animal', 23);
+
+insert into product(prod_code, prod_name, price, manufacturer)
+values (21, 'rur', 30, 'monitor');
+
+select *
+from product 
+where prod_code NOT IN (select prod_code from box );
+
+select a.prod_code, a.prod_name, a.price, a.manufacturer, b.box_contents, b.prod_code
+from product a full join box b on a.prod_code = b.prod_code
+where b.prod_code is null;
+
+SELECT * from product;
+
+select * from box;
+

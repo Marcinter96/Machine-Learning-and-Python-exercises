@@ -1,0 +1,65 @@
+CREATE TABLE Department(
+Dept_NO INT PRIMARY KEY,
+Dept_Name varchar(10),
+LocationA varchar(10)
+);
+
+
+CREATE TABLE EMP(
+EMPNO INT PRIMARY KEY,
+EMPName varchar(30),
+MANAGER INT,
+Foreign key (MANAGER) References EMP(EMPNO),
+SALARY FLOAT,
+DEPT_No INT,
+CONSTRAINT FK_Department FOREIGN KEY (Dept_NO)
+        REFERENCES Department(Dept_No)
+);
+
+INSERT INTO Department(Dept_NO, Dept_Name, LocationA)
+VALUES (21, 'Retail', 'Madrid')
+
+INSERT INTO Department(Dept_NO, Dept_Name, LocationA)
+VALUES (11, 'Finance', 'Lugano')
+
+INSERT INTO Department(Dept_NO, Dept_Name, LocationA)
+VALUES (34, 'Life', 'London')
+
+INSERT INTO Department(Dept_NO, Dept_Name, LocationA)
+VALUES (2, 'Retail', 'Zurich')
+
+INSERT INTO EMP(EMPNO, EMPName, MANAGER, SALARY, DEPT_NO)
+VALUES(1, 'Bob', NULL, 2300, 34)
+
+INSERT INTO EMP(EMPNO, EMPName, MANAGER, SALARY, DEPT_NO)
+VALUES(2, 'Maria', 1, 4300, 21)
+
+INSERT INTO EMP(EMPNO, EMPName, MANAGER, SALARY, DEPT_NO)
+VALUES(3, 'Ginevra', 1, 12000, 2)
+
+INSERT INTO EMP(EMPNO, EMPName, MANAGER, SALARY, DEPT_NO)
+VALUES(4, 'Bob', NULL, 230, 34)
+
+SELECT EMPNO, EMPName, SALARY,  Dept_Name, LocationA
+FROM EMP
+RIGHT JOIN Department
+ON EMP.DEPT_No = Department.DEPT_No
+WHERE Salary = (SELECT MIN(Salary) FROM EMP);
+
+
+SELECT Dept_Name, EMPName
+FROM EMP
+RIGHT JOIN Department
+ON EMP.DEPT_No = Department.DEPT_No
+
+
+SELECT COUNT(*), Department.Dept_Name 
+FROM Department 
+LEFT JOIN EMP ON EMP.DEPT_NO=Department.DEPT_NO
+GROUP BY Department.Dept_Name
+
+
+SELECT EMPNAME 
+FROM EMP 
+WHERE MANAGER IS NOT NULL;
+ 

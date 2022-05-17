@@ -1,0 +1,99 @@
+create table publisher(
+publisher_id number(7) primary key,
+publisher_name varchar(30) not null);
+
+create table book(
+book_id number(7) primary key,
+book_name varchar(50) not null,
+author varchar(35) not null,
+price decimal(10,2) not null,
+publish_date date, 
+publisher_id number(7) not null references publisher(publisher_id));
+
+insert into publisher values(10, 'TNW publishers');
+
+insert into publisher values(11, 'Leo');
+
+insert into publisher values(12, 'Feebs');
+
+commit;
+
+insert into book values(1, 'GOT', 'lala', '30.20', sysdate, 10);
+
+insert into book values(2, 'LOTR', 'baba', '25.99', sysdate-2, 11);
+
+insert into book values(3, 'Return of the Pnix', 'haha', '60.99', sysdate-3, 12);
+
+Commit;
+
+select a.book_name, a.price 
+from book a 
+join publisher b 
+on a.publisher_id = b.publisher_id
+where publisher_name = 'TNW publishers';
+
+insert into publisher values(13, 'Tom');
+commit;
+
+select * 
+from publisher 
+where publisher_id NOT IN (select publisher_id from book);
+
+select count (b.book_id), a.publisher_name 
+from publisher a 
+left join book b
+on a.publisher_id = b.publisher_id 
+group by a.publisher_name;
+
+select count (b.book_id), a.publisher_name 
+from publisher a 
+left join book b
+on a.publisher_id = b.publisher_id 
+group by a.publisher_name;
+
+select a.publisher_name, b.price
+from publisher a 
+left join book b
+on a.publisher_id = b.publisher_id 
+where b.price = (SELECT MAX(PRICE) from Book);
+
+insert into book values(4, 'GOT2', 'lala', '30.20', sysdate, 10);
+insert into book values(5, 'Return of the Pnix2', 'haha', '60.99', sysdate-3, 12);
+
+select a.publisher_name, count (b.book_id)
+from publisher a 
+left join book b
+on a.publisher_id = b.publisher_id 
+where b.price = (SELECT MAX(PRICE) from Book);
+
+SOl using HAVING:
+
+select author,count(publisher_id) 
+from book
+group by author
+having count(publisher_id)=(
+select min(mycount) from 
+(select author,count(publisher_id) as mycount from book group by author));
+
+Stessa sol ma versione TIM con il WHERE: 
+
+SELECT Author_name FROM (
+    SELECT Author_name, COUNT(*) publish_nr FROM Books GROUP BY Author_name
+    )
+    WHERE publish_nr IN (
+          SELECT MIN(publish_nr) FROM (
+               SELECT Author_name, COUNT(*) publish_nr FROM Books GROUP BY Author_name
+           )
+    )
+
+insert into book values(6, 'Return of the Pnix2', 'haha', '60.99', sysdate-1, 12);
+
+select a.book_name, a.author,b.publisher_id,b.publisher_name, a.PUBLISH_DATE
+from Book a 
+join Publisher b 
+On a.publisher_id=b.publisher_id 
+join Book c 
+On a.book_name=c.book_name
+group by a.book_name,a.author,b.publisher_id,b.publisher_name,a.publish_date
+having count(a.book_name)>1
+order by a.publish_date;
