@@ -1,0 +1,178 @@
+bash .install_sh
+user@workspacec911aydjgmep8kq2:/projects/challenge$ bash .install_sh
+mkdir: cannot create directory ‘test’: File exists
+fatal: remote origin already exists.
+user@workspacec911aydjgmep8kq2:/projects/challenge$ cd test
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git log --oneline
+30cdb1c (HEAD -> master) Added print statement
+8e2e325 First Commit
+f2b98a9 Added print statement
+daf184a First Commit
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ cat hello.py
+prin("Hello World")
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git add .
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git commit -amend -m "updated print"
+error: did you mean `--amend` (with two dashes ?)
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git commit --amend -m "updated print"
+[master 85a76b4] updated print
+Date: Tue Oct 12 08:29:28 2021 +0000
+1 file changed, 1 insertion(+), 1 deletion(-)
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git status
+On branch master
+nothing to commit, working tree clean
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git diff HEAD
+diff --git a/hello.py b/hello.py
+index ad35e5a..7bca63d 100644
+--- a/hello.py
++++ b/hello.py
+@@ -1 +1,2 @@
+print("Hello World")
++"Adding bug to file"
+\ No newline at end of file
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git checkout hello.py
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git add .
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git status
+On branch master
+Changes to be committed:
+(use "git reset HEAD <file>..." to unstage)
+
+
+
+modified: hello.py
+
+
+
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git diff --cached
+diff --git a/hello.py b/hello.py
+index ad35e5a..7bca63d 100644
+--- a/hello.py
++++ b/hello.py
+@@ -1 +1,2 @@
+print("Hello World")
++"Adding bug to file"
+\ No newline at end of file
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git reset
+Unstaged changes after reset:
+M hello.py
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git status
+On branch master
+Changes not staged for commit:
+(use "git add <file>..." to update what will be committed)
+(use "git checkout -- <file>..." to discard changes in working directory)
+
+
+
+modified: hello.py
+
+
+
+no changes added to commit (use "git add" and/or "git commit -a")
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git add .
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git status
+On branch master
+Changes to be committed:
+(use "git reset HEAD <file>..." to unstage)
+
+
+
+modified: hello.py
+
+
+
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git status
+On branch master
+Changes to be committed:
+(use "git reset HEAD <file>..." to unstage)
+
+
+
+modified: hello.py
+
+
+
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git log
+commit 85a76b46e706d7c863ed218ad7d45a5eaa391ac4 (HEAD -> master)
+Author: User <user@hackerrank.workspace>
+Date: Tue Oct 12 08:29:28 2021 +0000
+
+
+
+updated print
+
+
+
+commit 8e2e3254dcd91d863cbed7f2f285fc37a2d9772c
+Author: User <user@hackerrank.workspace>
+Date: Tue Oct 12 08:29:28 2021 +0000
+
+
+
+First Commit
+
+
+
+commit f2b98a9cb4ab972092db01759af8329adf6ef0da
+Author: User <user@hackerrank.workspace>
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git reset --hard 8e2e3254dcd91d863cbed7f2f285fc37a2d9772c
+HEAD is now at 8e2e325 First Commit
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git add .
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git commit -m "step 4"
+[master 5fee7f1] step 4
+1 file changed, 1 insertion(+), 1 deletion(-)
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git log --oneline
+5fee7f1 (HEAD -> master) step 4
+8e2e325 First Commit
+f2b98a9 Added print statement
+daf184a First Commit
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git show HEAD
+commit 5fee7f124923e3bcb0839d00c4b28e8997688368 (HEAD -> master)
+Author: User <user@hackerrank.workspace>
+Date: Tue Oct 12 08:35:18 2021 +0000
+
+
+
+step 4
+
+
+
+diff --git a/hello.py b/hello.py
+index 802992c..abbe209 100644
+--- a/hello.py
++++ b/hello.py
+@@ -1 +1 @@
+-Hello world
++print("Added bug to the script")
+\ No newline at end of file
+...skipping...
+commit 5fee7f124923e3bcb0839d00c4b28e8997688368 (HEAD -> master)
+Author: User <user@hackerrank.workspace>
+Date: Tue Oct 12 08:35:18 2021 +0000
+
+
+
+step 4
+
+
+
+diff --git a/hello.py b/hello.py
+index 802992c..abbe209 100644
+--- a/hello.py
++++ b/hello.py
+@@ -1 +1 @@
+-Hello world
++print("Added bug to the script")
+\ No newline at end of file
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git revert HEAD
+[master a3d7a67] Revert "step 4"
+1 file changed, 1 insertion(+), 1 deletion(-)
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$ git revert HEAD...HEAD~3 --no-edit
+[master 17819c4] Revert "Revert "step 4""
+Date: Tue Oct 12 08:36:28 2021 +0000
+1 file changed, 1 insertion(+), 1 deletion(-)
+[master 86ea838] Revert "step 4"
+Date: Tue Oct 12 08:36:28 2021 +0000
+1 file changed, 1 insertion(+), 1 deletion(-)
+[master 0b7907b] Revert "First Commit"
+Date: Tue Oct 12 08:36:28 2021 +0000
+1 file changed, 1 insertion(+), 1 deletion(-)
+user@workspacec911aydjgmep8kq2:/projects/challenge/test$
