@@ -1,0 +1,41 @@
+import threading
+
+def square_it(n):
+  print(n**2)
+
+def do_it(a,b):
+  t1 = threading.Thread(target=square_it, args=(a,))
+  t2 = threading.Thread(target=square_it, args=(b,)) 
+  t1.start()
+  t2.start()
+***************************************************************
+import multiprocessing 
+def calc_it(start, end):
+  l = []
+  for i in range(start, end+1):
+    l.append(i)
+  return sum(l)
+
+def do_it(n):
+  with multiprocessing.Pool(4) as pool:
+        p = pool.starmap(calc_it, [(1, n)])
+  p = p[0]
+  return p
+****************************************************************
+import asyncio
+
+async def question():
+  #Complete this coroutine
+  print("Is asyncio better for IO bound programs than the CPU bound ones?")
+  await answer()
+  print("Is async a keyword in the latest Python3?")
+  await answer()
+  print("Is event loop the heart of an asyncio program?")
+  await answer()
+
+
+
+async def answer():
+  #Complete this coroutine
+  print("Yes, it is!")  
+asyncio.run(question())

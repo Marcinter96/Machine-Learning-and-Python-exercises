@@ -1,0 +1,216 @@
+def main():
+    zenPython = '''
+    full text
+    '''
+    
+    fp = io.StringIO(zenPython)
+    
+    zenlines = fp.readlines()
+    
+    zenlines = [ line.strip() for line in zenlines ]
+    
+    #Add implementation here to set and match patterns
+    portions=re.findall(r"[-*] ?([^-*].*?) ?[-*]",zenPython)
+    #Add portions implementation here
+                
+    return portions
+*******************************************************************************************
+The regex r"[-*] ?([^-*].*?) ?[-*]" will look for:
+
+ [-*] ?               - or * followed by optional space
+ ([^-*].*?)           grouping any character different then - or * as few as possible
+  ?[-*]               optional space followed by - or * 
+This will not work for text like:
+
+This is --- not going-to work -- example. 
+Play around with regex here: https://regex101.com/r/wNBJEE/1
+*************************************************************************************************
+def subst(pattern, replace_str, string):
+    #susbstitute pattern and return it
+    return re.sub(pattern, replace_str, string)
+
+def main():
+    addr = ['100 NORTH MAIN ROAD',
+            '100 BROAD ROAD APT.',
+            'SAROJINI DEVI ROAD',
+            'BROAD AVENUE ROAD']
+            
+    #Create pattern Implementation here 
+    pattern = r'\bROAD\b'
+    word = "RD."
+    new_address = [subst(pattern, word, r) for r in addr]
+    #Use subst function to replace 'ROAD' to 'RD.',Store as new_address
+    return new_address
+****************************************************************************************************
+def main():
+    conn = sqlite3.connect('SAMPLE.db')
+    cursor = conn.cursor()
+
+    cursor.execute("drop table if exists ITEMS")
+    
+    sql_statement = '''CREATE TABLE ITEMS
+    (item_id integer not null, item_name varchar(300), 
+    item_description text, item_category text, 
+    quantity_in_stock integer)'''
+    
+    cursor.execute(sql_statement)
+
+    items = [(101, 'Nik D300', 'Nik D300', 'DSLR Camera', 3),
+             (102, 'Can 1300', 'Can 1300', 'DSLR Camera', 5),
+             (103, 'gPhone 13S', 'gPhone 13S', 'Mobile', 10),
+             (104, 'Mic canvas', 'Mic canvas', 'Tab', 5),
+             (105, 'SnDisk 10T', 'SnDisk 10T', 'Hard Drive', 1)
+             ]
+  
+    try:
+        cursor.executemany("Insert into ITEMS values (?,?,?,?,?)", items)
+        cursor.executemany("update ITEMS set quantity_in_stock = ? where item_id = ?",
+                       [(4, 103),
+                        (2, 101),
+                        (0, 105)])
+        #Add code below to delete items
+        cursor.execute("DELETE FROM ITEMS WHERE item_id =105")
+        conn.commit()
+        cursor.execute("select item_id from ITEMS")
+    except:
+        return 'Unable to perform the transaction.'
+    rowout=[]     
+    for row in cursor.fetchall():
+        rowout.append(row)
+    return rowout    
+    conn.close()
+********************************************************************************************************
+#Write detecter implementation
+def detecter(el):
+    #Write isIn implementation 
+    def isIn(seq):
+        for i in seq:
+            if i == el:
+                return True
+        else:
+            return False
+    
+    return isIn
+**************************************************************************************************
+def factory(n=0):
+    
+    def current():
+        return n
+    def counter():
+        n = current()+1
+        return n
+    
+    return current, counter
+    
+
+f_current, f_counter = factory(int(input()))
+****************************************************************************************************
+
+def bold_tag(func):
+    
+    def inner(*args, **kwdargs):
+        return '<b>'+func(*args, **kwdargs)+'</b>'
+        
+    return inner
+
+def italic_tag(func):
+    
+    def inner(*args, **kwdargs):
+        return '<i>'+func(*args, **kwdargs)+'</i>'
+        
+    return inner
+    
+#Add greet() implementation here
+@italic_tag
+@bold_tag
+def greet():
+    return input()  
+**********************************************************************************************************
+class Celsius:
+
+    def __get__(self, instance, owner):
+        return 5 * (instance.fahrenheit - 32) / 9
+
+    def __set__(self, instance, value):
+        instance.fahrenheit = 32 + 9 * value / 5
+
+
+class Temperature:
+
+    celsius = Celsius()
+
+    def __init__(self, initial_f):
+        self.fahrenheit = initial_f
+**********************************************************************************************
+class Circle:
+    no_of_circles  = 0
+    def __init__(self, radius=1):
+        self.__radius = radius
+        Circle.no_of_circles  +=1
+    def area(self):
+        return 3.14*(self.__radius**2)
+    @classmethod
+    def getCircleCount(self):
+        return Circle.no_of_circles
+    @staticmethod
+    def getPi():
+        return 3.14
+*********************************************************
+class Animal(ABC):
+  @abstractmethod
+  def say(self):
+    pass
+
+# Define class Dog derived from Animal
+# Also define 'say' method inside 'Dog' class
+class Dog(Animal):
+    def say(self):
+         return "I speak Booooo"
+**********************************************************************
+# Define 'writeTo' function below, such that 
+# it writes input_text string to filename.
+def writeTo(filename, input_text):
+    with open(filename, "w") as fp:
+        fp = fp.write(input_text)
+# Define the function 'archive' below, such that
+# it archives 'filename' into the 'zipfile'
+def archive(zfile, filename):
+    with zipfile.ZipFile(zfile, 'w') as z:
+    # printing all the contents of the zip file
+        z.write(filename)
+************************************************************************
+def run_process(cmd_args):
+    with subprocess.Popen(cmd_args,stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
+        out, err = p.communicate()
+    return out
+************************************************************************
+# Define the function 'coroutine_decorator' below
+def coroutine_decorator(func):
+    def wrapper(*args, **kwdargs):
+        c = func(*args, **kwdargs)
+        next(c)
+        return c
+    return wrapper
+
+# Define the coroutine function 'linear_equation' below
+@coroutine_decorator
+def linear_equation(a, b):
+    while True:
+        x=yield
+        e=a*(x**2)+b
+        print("Expression, {0}*x^2 + {1}, with x being {2} equals {3}".format(a,b,x,e))
+# Define the coroutine function 'numberParser' below
+@coroutine_decorator
+def numberParser():
+    equation1 = linear_equation(3, 4)
+    equation2 = linear_equation(2, -1)
+    # code to send the input number to both the linear equations
+    while True :
+        x = yield
+        equation1.send(x)
+        equation2.send(x)
+    
+def main(x):
+    n = numberParser()
+    n.send(x)
+**********************************************************************************************

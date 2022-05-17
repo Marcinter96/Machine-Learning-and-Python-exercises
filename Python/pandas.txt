@@ -1,0 +1,194 @@
+Hands on 1:
+
+#Write your code here
+import pandas as pd
+import numpy as np
+
+np.random.seed(100)
+#Task 1
+heights_A = pd.Series([176.2, 158.4, 167.6, 156.2, 161.4], index=["s1","s2", "s3","s4","s5"])
+print(heights_A.shape)
+# Task 2
+weights_A = pd.Series([85.1, 90.2, 76.8, 80.4, 78.9], index=["s1","s2", "s3","s4","s5"])
+print(weights_A.dtype)
+# Task 3
+df_A = pd.DataFrame([weights_A,heights_A]).transpose().rename(columns={0: "Student_height", 1:"Student_weight"})
+print(df_A.shape)
+#Task 4
+arr_h= np.random.normal(170, 25, 5)
+heights_B = pd.Series(arr_h, index=["s1","s2", "s3","s4","s5"])
+arr_w = np.random.normal(75, 12, 5)
+weights_B = pd.Series(arr_w, index=["s1","s2", "s3","s4","s5"])
+print(heights_B.mean())
+# Task 5
+df_B = pd.DataFrame([heights_B, weights_B]).transpose().rename(columns={0: "Student_height", 1:"Student_weight"})
+print(df_B.columns)
+
+
+Hands on 2
+#Write your code here
+#Write your code here
+import pandas as pd
+import numpy as np
+
+#Task 1
+heights_A = pd.Series([176.2, 158.4, 167.6, 156.2, 161.4], index=["s1","s2", "s3","s4","s5"])
+print(heights_A[1])
+#Task 2
+print(heights_A[1:4])
+#Task 3
+weights_A = pd.Series([85.1, 90.2, 76.8, 80.4, 78.9], index=["s1","s2", "s3","s4","s5"])
+df_A = pd.DataFrame([weights_A,heights_A]).transpose().rename(columns={0: "Student_height", 1:"Student_weight"})
+
+height = df_A['Student_height']
+print(type(height))
+
+#Task 4
+df_s1s2 =df_A.loc[["s1","s2"]]
+print(df_s1s2)
+
+#Task 5
+df_s2s5s1 = df_A.loc[["s2","s5","s1"]]
+print(df_s2s5s1)
+
+#Task 6
+df_s1s4 = df_A.loc[(df_A.index.str.endswith('1') | df_A.index.str.endswith('4'))]
+print(df_s1s4)
+
+Hands on 3
+#Write your code here
+import pandas as pd
+import numpy as np
+
+#Task 1
+heights_A = pd.Series([176.2, 158.4, 167.6, 156.2, 161.4], index=["s1","s2", "s3","s4","s5"])
+weights_A = pd.Series([85.1, 90.2, 76.8, 80.4, 78.9], index=["s1","s2", "s3","s4","s5"])
+df_A = pd.DataFrame([weights_A,heights_A]).transpose().rename(columns={0: "Student_height", 1:"Student_weight"})
+df_A.to_csv("classA.csv")
+
+#Task 2
+df_A2 = pd.read_csv("classA.csv")
+print(df_A2)
+
+#Task 3
+df_A3 = pd.read_csv("classA.csv", index_col=0)
+print(df_A3)
+
+#Task 4
+arr_h= np.random.normal(170, 25, 5)
+heights_B = pd.Series(arr_h, index=["s1","s2", "s3","s4","s5"])
+arr_w = np.random.normal(75, 12, 5)
+weights_B = pd.Series(arr_w, index=["s1","s2", "s3","s4","s5"])
+df_B = pd.DataFrame([heights_B, weights_B]).transpose().rename(columns={0: "Student_height", 1:"Student_weight"})
+df_B.to_csv("classB.csv", index=False)
+
+#Task 5
+df_B2 = pd.read_csv("classB.csv")
+print(df_B2)
+
+#Task 6
+df_B3 = pd.read_csv("classB.csv", header= None)
+print(df_B3)
+
+#Task 7
+df_B4 = pd.read_csv("classB.csv", header =None, skiprows= 2)
+print(df_B4)
+
+Hands on 4:
+import pandas as pd
+import numpy as np
+
+#TASK 1
+dates = pd.date_range(start = '09/01/2017',end='09/15/2017')
+print(dates[2])
+
+
+#Task 2
+datelist =["14-Sep-2017","9-Sep-2017"]
+date_to_be_searched = pd.to_datetime(datelist)
+print(date_to_be_searched)
+
+#Task 3
+print(date_to_be_searched.isin(datelist))
+
+#Task 4
+arraylist = [['classA']*5 + ['classB']*5,['s1','s2','s3','s4','s5']* 2]
+mi_index = pd.MultiIndex.from_product(arraylist,names=['First Level','Second Level'])
+print(mi_index.levels)
+
+Hands on 5:
+#Write your code here
+import pandas as pd
+import numpy as np
+height_A = pd.Series([176.2,158.4,167.6,156.2,161.4])
+height_A.index = ['s1','s2','s3','s4','s5']
+weight_A = pd.Series([85.1,90.2,76.8,80.4,78.9])
+weight_A.index = ['s1','s2','s3','s4','s5']
+df_A = pd.DataFrame()
+df_A['Student_height'] = height_A
+df_A['Student_weight'] = weight_A
+
+df_A.loc['s3'] = np.nan
+df_A.loc['s5'][1] = np.nan
+
+df_A2 = df_A.dropna(how = 'any')
+print(df_A2)
+
+
+Hands on 7:
+import pandas as pd
+import numpy as np
+
+#Task 1
+
+height_A = pd.Series([176.2,158.4,167.6,156.2,161.4])
+height_A.index = ['s1','s2','s3','s4','s5']
+weight_A = pd.Series([85.1,90.2,76.8,80.4,78.9])
+weight_A.index = ['s1','s2','s3','s4','s5']
+df_A = pd.DataFrame()
+df_A['Student_height'] = height_A
+df_A['Student_weight'] = weight_A
+df_A["Gender"] = ['M','F','M','M','F']
+s = pd.Series([165.4, 82.7, 'F'], index = ['Student_height','Student_weight','Gender'],name='s6')
+df_AA = df_A.append(s)
+print(df_AA)
+
+#TASK - 2
+my_mean = 170.0
+my_std = 25.0
+np.random.seed(100)
+heights_B = pd.Series(np.random.normal(loc = my_mean,scale=my_std,size = 5))
+heights_B.index = ['s1','s2','s3','s4','s5']
+
+my_mean1 = 75.0
+my_std1 = 12.0
+np.random.seed(100)
+weights_B = pd.Series(np.random.normal(loc = my_mean1,scale=my_std1,size = 5))
+weights_B.index = ['s1','s2','s3','s4','s5']
+
+df_B = pd.DataFrame()
+df_B['Student_height'] = heights_B
+df_B['Student_weight'] = weights_B
+
+df_B.index=['s7','s8','s9','s10','s11']
+df_B['Gender'] = ['F','M','F','F','M']
+
+df = pd.concat([df_AA,df_B])
+print(df)
+
+Hands on 8:
+#Write your code here
+import pandas as pd
+
+nameid = pd.Series(range(101,111))
+name = pd.Series(['person'+ str(i) for i in range(1,11)])
+master = pd.DataFrame({"nameid":nameid, "name":name})
+
+transaction = pd.DataFrame({'nameid':[108, 108, 108, 103],
+ 'product':['iPhone', 'Nokia', 'Micromax', 'Vivo']})
+
+mdf = master.merge(transaction, left_on='nameid', right_on='nameid')
+print(mdf)
+
+
+

@@ -1,0 +1,334 @@
+def function(a):
+
+    regex = '^[aeiouAEIOU][A-Za-z0-9_]*'
+
+    if(re.search(regex, a)): 
+        match = True
+    else:
+        match = False
+
+    return match
+
+
+def function(a):
+    b = a.split(" ")
+    regex = '^[e][A-Za-z0-9_]*'
+    if(re.search(regex, b[0]) and re.search(regex, b[1])): 
+        m = True
+    else:
+        m = False
+    #print(m)
+    return m
+
+
+def function(a):
+    regex = '^[a-zA-Z]'
+    if(re.search(regex, a)): 
+        result = True
+    else:
+        result = False
+    
+    return result
+
+
+def main(x):
+    #print(x)
+    names=re.findall(r"((?:[A-Z][a-z']+)|[A-Z]+)", x)
+    #print(names)
+    values=re.findall(r"((?:[0-9][0-9']+)|[0-9]+)", x)
+    #print(values)
+    dicts=dict(zip(names, values))
+    
+    return dicts
+##################################################################################################
+
+
+import requests
+from requests.exceptions import HTTPError
+response = requests.get("https://api.github.com") 
+try:
+    a= response.status_code
+    b= response.encoding
+    c= response.text
+
+
+####################################################################################################
+
+
+# Enter your code here. 
+import pickle
+from collections import OrderedDict
+import os
+data= {'a': [5,9], 'b': [5,6], 'c': ["Pickle is", "helpful"]}
+#Dump file in pickle
+with open('test.pkl', 'wb') as f:
+  pickle.dump(data, f)
+del data
+
+#Read data back from pickle
+with open('test.pkl', 'rb') as f:
+  a = pickle.load(f)
+print(a)  
+
+
+################################################################################################
+
+import os
+import pickle
+class Player:
+    def __init__(self, name, runs):
+      self.name = name
+      self.runs = runs
+    
+    
+#Write code here to access value for name and runs from class PLayer    
+myPlayer= Player("dhoni", 10000)
+
+    
+#Write code here to store the object in pickle file
+with open('test.pickle', 'wb') as f:
+  pickle.dump(myPlayer, f)
+
+
+del myPlayer
+
+#Write code here to read the pickle file 
+with open('test.pickle', 'rb') as f:
+  a = pickle.load(f)
+print(a.name)
+print(a.runs)  
+
+################################################################################################
+
+import os
+import builtins
+import pickle
+import sys
+sys.tracebacklimit=0
+import traceback
+import io
+from logging import Logger
+
+safe_builtins = {'range', 'complex', 'set', 'frozen'
+}
+
+class RestrictedUnpickler(pickle.Unpickler):
+
+    def find_class(self, module, name):
+        # Only allow safe classes from builtins.
+        if module == "builtins" and name in safe_builtins:
+          return getattr(builtins, name)
+        # Forbid everything else.
+        print("Traceback (most recent call last):")
+        raise pickle.UnpicklingError("global '%s.%s' is forbidden"%(module, name))
+        
+
+def restricted_loads(s):
+        """Helper function analogous to pickle.loads()."""
+        return RestrictedUnpickler(io.BytesIO(s)).load()
+
+def func1(a):
+    try:
+        x = a
+        return x
+    except pickle.UnpicklingError :
+        s = traceback.format_exc()
+        
+        return s
+
+
+def func2(s):
+    try:
+        x = restricted_loads(pickle.dumps(slice(s)))
+        return s[x]
+    except pickle.UnpicklingError :
+        s = traceback.format_exc()
+        return s
+
+    
+if __name__ == "__main__":
+       a=range(int(input())) 
+       b=func1(a)
+       print(b)
+       y=tuple(input())
+       z=func2(y)
+       print(z)
+       print('')
+
+######################################################################################################
+
+import os
+import json
+
+def func1(value):
+    a= json.loads(value)
+
+    datas=[]
+    for i in a:
+        datas.append(a[i])
+    
+    return datas[0]
+
+if __name__ == "__main__":
+    try:
+        data=input()
+        b=func1(data)
+        print(True)
+        print(b)
+    except ValueError as error:
+        print(False)
+
+######################################################################################################
+    
+def func1(value):
+    a=json.dumps(value)
+    b=json.loads(value)
+    return b
+
+######################################################################################################
+
+from sqlalchemy import create_engine
+
+db_string = "sqlite:///tests.db"
+
+db = create_engine(db_string)
+
+#create
+db.execute("DROP TABLE players")
+db.execute("CREATE TABLE IF NOT EXISTS players (plyid text, plyname text, runs text)")  
+
+db.execute("INSERT INTO players (plyid, plyname, runs) VALUES ('10001', 'ply1', '100')")
+db.execute("INSERT INTO players (plyid, plyname, runs) VALUES ('10002', 'ply2', '80')")
+db.execute("INSERT INTO players (plyid, plyname, runs) VALUES ('10003', 'ply3', '65')")
+db.execute("INSERT INTO players (plyid, plyname, runs) VALUES ('10004', 'ply4', '95')")
+db.execute("INSERT INTO players (plyid, plyname, runs) VALUES ('10005', 'ply5', '99')")
+
+
+
+# Read
+
+
+result_set = db.execute("SELECT * FROM players")  
+s=[]
+for r in result_set:  
+  s.append(r)
+
+#Update
+
+
+
+db.execute("UPDATE players SET runs='100' WHERE plyname='ply5'")
+result_set = db.execute("SELECT * FROM players") 
+q=[]
+for r in result_set:  
+  q.append(r)
+
+#Delete
+
+
+db.execute("DELETE FROM players WHERE plyname='ply5'")
+result_set = db.execute("SELECT * FROM players") 
+e=[]
+for r in result_set:  
+  e.append(r)
+
+
+print(s)
+print(q)
+print(e)
+s=str(s)
+q=str(q)
+e=str(e)
+with open(".hidden.txt",'w') as f:
+	f.write(s)
+	
+with open(".hidden1.txt",'w') as f:
+	f.write(q)
+
+with open(".hidden2.txt",'w') as outfile:
+	outfile.write(e)
+
+#########################################################################################################
+
+from sqlalchemy import create_engine  
+from sqlalchemy import Column, String  
+from sqlalchemy.ext.declarative import declarative_base  
+from sqlalchemy.orm import sessionmaker
+
+db_string = "sqlite:///tests.db"
+
+db = create_engine(db_string)  
+base = declarative_base()
+
+class Teacher(base):  
+#Define table name and column name   
+  __tablename__ = 'students'
+  stdid = Column(String, primary_key=True)
+  stdname = Column(String)
+  subjects = Column(String)
+  marks = Column(String)
+
+Session = sessionmaker(db)  
+session = Session()
+
+base.metadata.create_all(db)
+
+#Create
+std1 = Teacher(stdid="10001", stdname="std1", subjects="Maths", marks="100")  
+session.add(std1)  
+std2 = Teacher(stdid="10002", stdname="std2", subjects="Physics", marks="80")  
+session.add(std2)  
+std3 = Teacher(stdid="10003", stdname="std3", subjects="English", marks="65")  
+session.add(std3)  
+std4 = Teacher(stdid="10004", stdname="std4", subjects="Social", marks="95")  
+session.add(std4)  
+std5 = Teacher(stdid="10005", stdname="std5", subjects="Chemistry", marks="99")  
+session.add(std5)  
+session.commit()
+
+#Read
+s=[]
+c=[]
+students = session.query(Teacher)  
+for stds in students:  
+	c.append(stds.stdid)
+  c.append(stds.stdname)
+  c.append(stds.subjects)
+  c.append(stds.marks)
+  s.append(c)
+  c = []
+
+session.commit()
+#Update
+std5.subjects = "Language"  
+q = [std5.stdid, std5.stdname, std5.subjects, std5.marks]
+session.commit()
+
+#Delete
+
+session.delete(std5)
+e = []
+c = []
+students = session.query(Teacher)
+for stds in students:  
+	c.append(stds.stdid)
+  c.append(stds.stdname)
+  c.append(stds.subjects)
+  c.append(stds.marks)
+  e.append(c)
+  c = []
+session.commit() 
+
+s=str(s)
+q=str(q)
+e=str(e)
+with open(".hidden.txt",'w') as f:
+	f.write(s)
+	
+with open(".hidden1.txt",'w') as f:
+	f.write(q)
+
+with open(".hidden2.txt",'w') as outfile:
+	outfile.write(e)
+
+

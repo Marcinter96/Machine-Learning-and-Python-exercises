@@ -1,0 +1,387 @@
+task1
+
+def stringmethod(para, special1, special2, list1, strfind):
+    for i in range(len(special1)):
+        para=para.replace(special1[i],'')
+
+    word1=para
+    rword2=word1[69::-1]
+    print(rword2)
+    print(special2.join(rword2.replace(' ','')))
+    a=True
+    for i in list1:
+        if i in para:
+            a=True
+        else:
+            a=False
+            
+    if a:
+        print(f'Every string in {list1} were present')
+    else:
+        print(f'Every string in {list1} were not present')
+            
+    l1=word1.split()
+    print(l1[0:20])
+
+    l2=list()
+
+    for i in l1:
+        if l1.count(i) < 3 and i not in l2: 
+            l2.append(i)
+            
+    print(l2[-20:])
+    print(word1.rfind(strfind))
+----------------------------------------------------------------------
+
+def generator_Magic(n1):
+    # Write your code here
+    for a in range(3,n1+1):
+        yield((a*a*a+a)/2)
+
+--------------------------------------------------------------
+
+def primegenerator(num, val):
+    # Write your code here
+    primes = []
+    for i in range(2,num):
+        for j in range(2,int(i/2)+1):
+            if i % j ==0:
+                break
+        else:
+            primes.append(i)
+            
+    for i in range(1-val,len(primes),2):
+        yield primes[i]
+
+--------------------------------------------
+
+# Write your code here
+class Movie:
+    
+    def __init__(self,val1,val2,val3):
+        self.movieName = val1
+        self.numberTickets = val2
+        self.totalCost = val3
+        
+    def __str__(self):
+        return "Movie : {}\nNumber of Tickets : {}\nTotal Cost : {}".format(self.movieName,self.numberTickets,self.totalCost) 
+ 
+
+# Write your code here
+class comp:
+
+    def __init__(self,real,imaginary):
+        self.real=real
+        self.imaginary=imaginary
+        
+    def add(a,b):
+        imag = a.imaginary + b.imaginary
+        s="+"
+        if (imag<0):
+            s=""
+        print("Sum of the two Complex numbers :"+str(a.real+b.real)+s+str(a.imaginary+b.imaginary)+"i")    
+
+    def sub(a,b):
+        imag = a.imaginary-b.imaginary
+        s="+"
+        if (imag<0):
+            s=""
+        print("Subtraction of the two Complex numbers :"+str(a.real-b.real)+s+str(a.imaginary-b.imaginary)+"i")   
+------------------------------------------------------------------------
+
+#Write your code here
+class son(parent):
+        def __init__(self,total_asset,pps):
+            super().__init__(total_asset)
+            self.pps=pps
+            
+        def son_display(self):
+            print("Share of Son is "+str(round(self.total_asset*self.pps/100,2))+" Million.")
+            
+            
+class daughter(parent):
+    def __init__(self,total_asset,pps):
+        super().__init__(total_asset)
+        self.pps=pps
+    def daughter_display(self):
+        print("Share of Daughter is "+str(round(self.total_asset*self.pps/100,2))+" Million.")       
+            
+
+
+# Write your code here
+class rectangle:
+    def display(self):
+        print("This is a Rectangle")
+        
+    def area(self, Length, Breadth):
+        print("Area of Rectangle is  "+str(Length*Breadth))
+        
+class square:
+    def display(self):
+        print("This is a Square")
+        
+    def area(self,Side):
+        print("Area of square is  "+str(Side*Side))       
+
+-----------------------------------------------------------------------------------------     
+# ex 6 Handling Exceptions
+
+def Handle_Exc1():
+    # Write your code here
+    a=int(input(""))
+    b=int(input(""))
+    if (a>150 or b <100):
+        raise ValueError("Input integers value out of range.")
+    elif (a+b>400):
+        raise ValueError("Their sum is out of range")
+    else:
+        print("All in range")
+
+-------------------------------------------------------------------------------------------
+# ex 7 Handling Exceptions
+
+def FORLoop():
+    # Write your code here
+    n = int(input(""))
+    l1=[]
+    for x in range(n):
+        a=int(input(''))
+        l1.append(a)
+    print(l1)
+    
+    iter1 = iter(l1)
+    for x in range(n):
+        print(next(iter1))
+    
+    return iter1
+
+------------------------------------------------------------------------------
+#ex 8 handling exceptions
+
+# Define the Class for user-defined exceptions "MinimumDepositError" and "MinimumBalanceError" here
+class MinimumDepositError(Exception):
+    pass
+
+class MinimumBalanceError(Exception):
+    pass
+
+def Bank_ATM(balance,choice,amount):
+    # Write your code here
+    #Balance = int(input(""))
+    #Choice = int(input(""))
+    #Amount = int(input(""))
+    
+    if (balance < 500):
+        raise ValueError("As per the Minimum Balance Policy, Balance must be at least 500")
+    
+    if (choice == 1 and amount <2000):
+        raise MinimumDepositError("The Minimum amount of Deposit should be 2000.")
+    
+    elif(choice==1):
+        balance+=amount
+        print("Updated Balance Amount:  "+str(balance))
+        
+    if (choice==2 and balance-amount<500):
+        raise MinimumBalanceError("You cannot withdraw this amount due to Minimum Balance Policy")
+    elif (choice==2):
+        balance-=amount
+        print("Updated Balance Amount:  "+str(balance))   
+
+------------------------------------------------------------------------------------------------------------------------------
+def Library(memberfee,installment,book):
+    # Write your code here
+    if installment > 3:
+        raise ValueError("Maximum Permitted Number of Installments is 3")
+    
+    elif installment == 0:
+        raise ZeroDivisionError("Number of Installments cannot be Zero.")
+    else:
+        per = memberfee/installment
+        
+        print("Amount per Installment is  {}".format(per,'.1f'))
+    hp = ['philosophers stone', 'chamber of secrets','prisoner of azkaban','goblet of fire','order of phoenix','half blood prince', 'deathly hallows 1', 'deathly hallows 2']
+    
+    if book.lower() in hp:
+        print("It is available in this section")
+    else:
+        raise NameError("No such book exists in this section")
+-----------------------------------------------------------------------------------------------------------------------------------
+# Exercise 10
+
+import calendar
+import datetime
+def dateandtime(val,tup):
+    # Write your code here
+    l1=[]
+    s=""
+    if (val==1):
+        for x in tup:
+            s+=str(x)
+            
+        d1=datetime.datetime.strptime(s,'%Y%m%d').date()
+        l1.append(d1)
+        l1.append(datetime.date.strftime(d1,'%d/%m/%Y'))
+        
+    elif(val==2):
+        l1.append(datetime.date.fromtimestamp(tup[0]))
+            
+    elif (val==3):
+        s=""
+        for x in tup:
+            s+=str(x)
+        s1=int(s)
+        t=datetime.time(tup[0],tup[1],tup[2])
+        l1.append(t)
+        h=datetime.time.strftime(t,'%I')
+            
+        l1.append(h)
+            
+    elif (val==4):
+        for x in tup:
+            s+=str(x)
+        s1=int(s)
+        d1=datetime.date(tup[0],tup[1],tup[2])
+        l1.append(calendar.day_name[d1.weekday()])
+        l1.append(calendar.month_name[d1.month])
+        l1.append(str(d1.strftime('%j')))
+            
+            
+    elif (val==5):
+        s=""
+        for x in tup:
+            s+=str(x)
+        s1=int(s)
+        l1.append(datetime.datetime.strptime(s,'%Y%m%d%H%M%S'))
+            
+    return l1    
+                   
+-----------------------------------------------------------------------------------------------------------------------------
+ # Exercise 11 / modules 2
+
+import itertools
+
+def performIterator(tuplevalues):
+    # Write your code here
+    l1=[]
+    l2=[]
+    for x in range(4):
+        l2.append(tuplevalues[0][x])
+        
+    t2 = tuple(l2)
+    l1.append(t2)
+    
+    ll=[tuplevalues[1][0] for x in range(len(tuplevalues[1]))]
+    
+    t3=tuple(ll)
+    l1.append(t3)
+    
+    t4 = tuple(itertools.accumulate(tuplevalues[2]))
+    l1.append(t4)
+    
+    f=[]
+    for x in tuplevalues:
+        for y in x:
+            f.append(y)
+    l1.append(tuple(f))
+        
+    ff=itertools.filterfalse(lambda x: x%2==0,f)
+    l1.append(tuple(ff))
+    
+    tf=tuple(l1)
+    return tf
+
+---------------------------------------------------------------------------------------------
+# Ex12 -- Crypto
+
+from cryptography.fernet import Fernet
+
+def encrdecr(keyval, textencr, textdecr):
+    # Write your code here
+    l1=[]
+    f = Fernet(keyval)
+    l1.append(f.encrypt(textencr))
+    l1.append(f.decrypt(textdecr).decode())
+    
+    return l1
+----------------------------------------------------------------------------------------------
+# Ex13 -- Calendar
+
+import calendar
+import datetime
+
+def usingcalendar(datetuple):
+    # Write your code here
+    y=datetuple[0]   #year
+    m=datetuple[1]   #month
+    
+    if(calendar.isleap(datetuple[0])==True):
+        m=2
+    print(calendar.month(datetuple[0],m))
+    
+    cal = calendar.Calendar()
+    g=cal.itermonthdates(y,m)
+    ld=[x for x in g]
+    ldt=ld[-7:]
+    print(ldt)
+     
+    try:
+        print(datetime.date(y,m,29).strftime('%A'))
+        
+    except ValueError:
+        print("Monday")    
+     
+--------------------------------------------------------------------------------------------------------
+# Ex 14 -- Dictionary
+
+from collections import OrderedDict 
+
+def collectionfunc(text1, dictionary1, key1, val1, deduct, list1):
+    # Write your code here
+    d1=text1.split(' ')
+    d={}
+    for x in d1:
+        if(x in d):
+            d[x]=d[x]+1
+        else:
+            d[x]=1
+    d2={}
+    for a in (sorted(d)):
+        d2[a]=d[a]
+    print(d2)
+    
+    
+    c=dictionary1
+    
+    for x in c.keys():
+        if(x in deduct.keys()):
+            c[x]=c[x]-deduct[x]
+            
+    for x in deduct.keys():
+        if(x not in c.keys()):
+            c[x]=0-deduct[x]  
+            
+    a = dict(c)
+    print(a)
+    od= OrderedDict()
+    for x in range(len(key1)):
+        od[key1[x]]=val1[x]
+    od.pop(key1[1])
+    od[key1[1]]=val1[1]
+    d=dict(od)
+    print(d)  
+    
+    df={}
+    df['odd']=[]
+    df['even']=[]
+    
+    for i in list1:
+        if(i%2==0):
+            df['even'].append(i)
+        else:
+            df['odd'].append(i)
+            
+    print({k:v for k,v in df.items() if len(v)>0})        
+            
+         
+
+
