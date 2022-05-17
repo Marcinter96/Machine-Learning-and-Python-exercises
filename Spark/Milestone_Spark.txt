@@ -1,0 +1,29 @@
+Milestone Challenge:
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+val data1 = spark.read.option("header", "true").csv("Pizza_1.csv")
+val data2 = spark.read.option("header", "true").csv("Pizza_2.csv")
+val data3 = spark.read.option("header", "true").csv("Pizza_3.csv")
+val data = data1.unionAll(data2).unionAll(data3)
+
+val df = data.withColumnRenamed("brand", "Brand").withColumnRenamed("id","ID").withColumnRenamed("fat", "Fat").withColumnRenamed("ash","Ash").withColumnRenamed("sodium", "Sodium").withColumnRenamed("mois","Moisture_Content").withColumnRenamed("prot","Protein").withColumnRenamed("carb","Carbohydrates").withColumnRenamed("cal","Calories")
+val last_df = df.withColumn("ID", 'ID.cast("int")).withColumn("Fat", 'Fat.cast("float")).withColumn("Ash", 'Ash.cast("float")).withColumn("Sodium", 'Sodium.cast("float")).withColumn("Moisture_Content", 'Moisture_Content.cast("float")).withColumn("Protein", 'Protein.cast("float")).withColumn("Carbohydrates", 'Carbohydrates.cast("float")).withColumn("Calories", 'Calories.cast("float"))
+
+last_df.printSchema
+val clean_data = last_df.dropDuplicates()
+println(clean_data.count)
+val df1 = clean_data.withColumn("Pizza_Review", when(col("Protein")>=15 && col("Carbohydrates")<=20,"Qualifies").otherwise("Disqualified"))
+
+val diet = df1.filter(col("Protein")<19 && col("Fat")>=30)
+diet.write.option("header", "true").csv("Diet_Pizza")
+val heavy = df1.join(diet, Seq("ID"),"left_anti")
+****************************************************************************************************************************************************************************************************
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+val df = spark.read.option("sep", "#").option("header", "true").csv("weblog.csv")
+val df1 = df.select("Urgency")
+val df2 = df1.groupBy($"Urgency").count.orderBy($"Urgency".asc)
+val df3 = df2.withColumnRenamed("count", "Total_Count")
+df3.write.parquet("log_analysis")
+
+

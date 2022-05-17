@@ -1,0 +1,185 @@
+HANDS-ON PySpark
+
+*************************************************************************
+from pyspark.sql import SparkSession
+spark = SparkSession \
+    .builder \
+    .appName("Data Frame Example") \
+    .config("spark.some.config.option", "some-value") \
+    .getOrCreate()
+
+
+from pyspark.sql import *
+passenger = Row("Name", "age", "source", "destination")
+p1 = passenger('David', 22, 'London', 'Paris')
+p2 = passenger('Steve', 22, 'New York', 'Sydney')
+passengerData=[p1,p2]
+df=spark.createDataFrame(passengerData)
+df.show()
+
+
+# Don't Remove this line 
+df.coalesce(1).write.parquet("PassengerData")
+
+**********************************************************************
+from pyspark.sql import SparkSession
+spark = SparkSession \
+    .builder \
+    .appName("Data Frame Example") \
+    .config("spark.some.config.option", "some-value") \
+    .getOrCreate()
+
+df = spark.read.json("emp.json")
+df.show()
+df.write.parquet("Employees")
+df_java = df.filter(df['stream']=='JAVA')
+df_java.write.parquet("JavaEmployees")
+************************************************************************
+# Put your code here
+from pyspark.sql import *
+spark = SparkSession \
+    .builder \
+    .appName("Data Frame Example") \
+    .config("spark.some.config.option", "some-value") \
+    .getOrCreate()
+
+
+from pyspark.sql.functions import rand
+
+sqlContext = SQLContext(spark)
+
+df = sqlContext.range(0, 10).withColumn('rand1', rand(seed=10)).withColumn('rand2', rand(seed=27))
+cov = df.stat.cov('rand1', 'rand2')
+corr = df.stat.corr('rand1', 'rand2')
+data = [("Co-variance", cov), ("Correlation",corr)]
+columns = ["Stats", "Value"]
+DF = spark.createDataFrame(data=data, schema=columns)
+
+DF.show()
+DF.write.parquet("Result")
+*************************************************************
+from pyspark.sql import SparkSession
+spark = SparkSession \
+    .builder \
+    .appName("Data Frame Example") \
+    .config("spark.some.config.option", "some-value") \
+    .getOrCreate()
+from pyspark.sql import *
+Personal = Row("ID","Name","Age","Area of Interest")
+
+data1 = Personal("1","Jack", "22", "Data Science")
+data2 = Personal("2","Luke", "21", "Data Analytics")
+data3 = Personal("3","Leo", "24", "Micro Services")
+data4 = Personal("4","Mark", "21", "Data Analytics")
+
+PersonalData=[data1,data2,data3,data4]
+df = spark.createDataFrame(PersonalData)
+Result1 = df.describe('Age')
+Result1.coalesce(1).write.parquet("Age")
+
+Result2 = df.select("ID","Name","Age").orderBy('Name',ascending=False)
+Result2.coalesce(1).write.parquet("NameSorted")
+
+*************************************************************************
+
+HANDS-ON SPARK SQL
+*****************************************************************************
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+val langPercentDF = spark.createDataFrame(List(("Scala", 35), ("Python", 30), ("R", 15), ("Java", 20)))
+langPercentDF.show()
+val lpDF = langPercentDF.withColumnRenamed("_1", "language").withColumnRenamed("_2", "percent")
+lpDF.show()
+lpDF.orderBy(desc("percent")).show()
+******************************************************************************************
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+val numDS = spark.range(5,50,5)
+numDS.show()
+numDS.orderBy(desc("id")).show(5)
+numDS.describe().show()
+*****************************************************************************************
+touch People.json
+vim People.json
+# Copy code
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+val df = spark.read.json("People.json")
+df.show()
+case class Person(name: String, age: String);
+
+val dfP = spark.read.json("People.json").as[Person]
+dfP.show()
+****************************************************************************************
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+val df = spark.read.json("People.json")
+df.write.parquet("data.parquet")
+spark.read.parquet("data.parquet").show()
+***************************************************************************************
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+val cdf = spark.read.option("header",true).option("inferschema",true).csv("Census/demography.csv")
+cdf.show(5)
+
+val cdf_avg = cdf.select(mean(cdf("Total Population")))
+val cdf_avg_mod= cdf_avg.withColumnRenamed("avg(Total Population)", "avgPop")
+cdf_avg_mod.write.parquet("avg.parquet")
+val cdf_sum = cdf.select(sum(cdf("Total Males")))
+val cdf_sum_mod= cdf_sum.withColumnRenamed("sum(Total Males)", "sumMales")
+cdf_sum_mod.write.option("header", true).csv("males.csv")
+
+********************************************************************************************
+SPARK Preliminaries
+********************************************************************************************
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+val data = Array(1,2,3,4,5,6,7,8,9)
+val rdd= sc.parallelize(data)
+********************************************************************************************
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession
+val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+val df = sqlContext.read.json("Students.json")
+df.show()
+df.registerTempTable("students")
+val sql = sqlContext.sql("SELECT name, age FROM students WHERE age = 22")
+sql.show()
+***********************************************************************************************
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession
+val broadcastVar = sc.broadcast(Array(1, 2, 3, 4, 5))
+broadcastVar.value
+val accum = sc.longAccumulator("Fresco Accumulator") 
+val data = Array(1,2,3,4,5,6,7,8,9)
+val rdd= sc.parallelize(data)
+rdd.foreach(x => accum.add(x))
+accum.value
+*********************************************************************************************
+spark-shell
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession
+val newrdd = sc.textFile("fresco.txt")
+newrdd.collect()
+val counts = newrdd.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
+counts.saveAsTextFile("Wordcount")
+**********************************************************************************************
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+
+
+#display and save in a file list of top 5 players
+val data = sc.textFile("/projects/challenge/Spark/matches.csv")
+val filtering_bad_records = data.map(line=>line.split(","))
+val extracting_columns = filtering_bad_records.map(x=>x(15))
+val best_players = extracting_columns.map(x=>(x,1)).reduceByKey(_+_).map(item=>item.swap).sortByKey(false).take(5)
+sc.parallelize(best_players).saveAsTextFile("IPLData/result.csv")
+

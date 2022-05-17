@@ -1,0 +1,43 @@
+Project APACHE SPARK
+
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.master("local").appName("spark").getOrCreate()
+#Cleaning data
+val DF = spark.read.parquet("h1_b_dataset.parquet").select("CASE_STATUS", "VISA_CLASS", "EMPLOYER_NAME", "JOB_TITLE", "PREVAILING_WAGE", "PW_SOURCE_YEAR", "WORKSITE_STATE")
+val DF2 = DF.withColumnRenamed("PREVAILING_WAGE", "SALARY").withColumnRenamed("PW_SOURCE_YEAR", "FINANCIAL_YEAR")
+val DF3 = DF2.filter(col("EMPLOYER_NAME").endsWith("LLC") === false)
+val DF4 = DF3.withColumn("SALARY", 'SALARY.cast("double"))
+val DF5 = DF4.withColumn("FINANCIAL_YEAR", 'FINANCIAL_YEAR.cast("int"))
+val DF6 = DF5.na.drop(Seq("SALARY"))
+
+DF6.write.option("header","true").csv("cleaned_data")
+# Question 1
+val dt = spark.read.option("header", "true").csv("cleaned_data/cleaned_data.csv")
+val dt1 = dt.filter(col("CASE_STATUS")==="CERTIFIED")
+val dt2 = dt1.filter(dt1("VISA_CLASS")==="H-1B")
+val dt3 = dt2.groupBy("EMPLOYER_NAME").count().orderBy(desc("count"))
+val dt4 = dt3.withColumnRenamed("count", "APPROVED_VISA")
+val dt5 = dt4.limit(10)
+
+dt5.write.parquet("top_approvals")
+# Question 2
+val df1 = dt1.withColumn("Set1", when(col("SALARY")>10 && col("SALARY")<=10000,1).otherwise(0))
+val df2 = df1.withColumn("Set2", when(col("SALARY")>10000 && col("SALARY")<=50000,1).otherwise(0))
+val df3 = df2.withColumn("Set3", when(col("SALARY")>50000 && col("SALARY")<=100000,1).otherwise(0))
+df3.groupBy("WORKSITE_STATE").sum("Set1").orderBy("WORKSITE_STATE").show(10)
+
+val dz=df3.select("WORKSITE_STATE","Set1","Set2","Set3").orderBy("WORKSITE_STATE")
+val dz1 = dz.groupBy("WORKSITE_STATE").agg(sum("Set1"), sum("Set2"),sum("Set3"))
+val dz2 = dz1.withColumnRenamed("sum(Set1)", "Set1").withColumnRenamed("sum(Set2)", "Set2").withColumnRenamed("sum(Set3)", "Set3")
+dz2.write.option("header", "true").csv("location_count")
+
+
+val result = d.withColumn("dummy", explode(array((1 until 54).map(lit): _*))).drop("dummy")
+
+
+
+
+
+
+
+
