@@ -1,0 +1,35 @@
+#Write program here
+import spacy 
+from spacy.matcher import Matcher
+
+def main(text):
+  nlp = spacy.load("en_core_web_sm")
+  matcher = Matcher(nlp.vocab)
+  pattern = [{'TEXT': 'iOS'},{'IS_DIGIT': True}]
+  matcher.add("iOS", None, pattern)
+  doc = nlp(text)
+  matches = matcher(doc)
+  words = []
+  for match_id, start, end in matches:
+    span = doc[start:end]
+    words.append(span.text)
+  return words
+**********************************************************************
+#Write program here
+import spacy 
+from spacy.matcher import Matcher
+
+def main(text):
+  nlp = spacy.load("en_core_web_sm")
+  matcher = Matcher(nlp.vocab)
+  pattern1 = [{'TEXT': 'iOS'},{'IS_DIGIT': True}]
+  pattern2 = [{'TEXT': 'iOS'},{'TEXT': 'X'}]
+  matcher.add("Number", None, pattern1)
+  matcher.add("X", None, pattern2)
+  doc = nlp(text)
+  matches = matcher(doc)
+  words = []
+  for match_id, start, end in matches:
+    span = doc[start:end]
+    words.append(span.text)
+  return words

@@ -1,0 +1,205 @@
+#Write your code here
+import sklearn.datasets
+import sklearn.preprocessing
+
+iris = sklearn.datasets.load_iris()
+
+normalizer = sklearn.preprocessing.Normalizer()
+
+iris_normalized = normalizer.transform(iris.data)
+
+print(iris_normalized.mean(axis=0))
+
+#Write your code here
+
+from sklearn import datasets, model_selection, neighbors, metrics
+
+#task 1
+iris = datasets.load_iris()
+x = iris.data
+y = iris.target
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(x, y, random_state=30, stratify = y)
+print(X_train.shape)
+print(X_test.shape)
+#task 2
+knn_clf = neighbors.KNeighborsClassifier()
+knn_clf.fit(X_train, Y_train)
+print(knn_clf.score(X_train, Y_train))
+print(knn_clf.score(X_test, Y_test))
+#task 3
+k_range = range(3, 10)
+accuracy = 0
+depth = 0
+for k in k_range:
+  knn = neighbors.KNeighborsClassifier(n_neighbors=k)
+  knn.fit(X_train, Y_train)
+  score = knn.score(X_test, Y_test)
+  if score > accuracy:
+      accuracy = score
+      depth = k
+
+print(depth)
+
+Decision tree
+#Write your code here
+
+from sklearn import datasets, model_selection, tree, metrics
+import numpy as np 
+
+np.random.seed(100)
+#task 1
+boston = datasets.load_boston()
+x = boston.data
+y = boston.target
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(x, y, random_state=30)
+print(X_train.shape)
+print(X_test.shape)
+#task 2
+dt_reg = tree.DecisionTreeRegressor()
+dt_reg.fit(X_train, Y_train)
+print(dt_reg.score(X_train, Y_train))
+print(dt_reg.score(X_test, Y_test))
+print(dt_reg.predict(X_test[:2]))
+
+#task 3
+k_range = range(2, 5)
+accuracy = 0
+depth = 0
+for k in k_range:
+  dt = tree.DecisionTreeRegressor(max_depth=k)
+  dt.fit(X_train, Y_train)
+  score = dt.score(X_test, Y_test)
+  if score > accuracy:
+      accuracy = score
+      depth = k
+
+print(depth)
+
+
+#Write your code here
+from sklearn import datasets, model_selection, svm, preprocessing
+import numpy as np 
+
+#task 1
+digits = datasets.load_digits()
+x = digits.data
+y = digits.target
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(x, y, random_state=30)
+print(X_train.shape)
+print(X_test.shape)
+#task 2
+svm_clf = svm.SVC()
+svm_clf.fit(X_train, Y_train)
+print(svm_clf.score(X_test, Y_test))
+
+#task 3
+scaler = preprocessing.StandardScaler()
+scaler.fit(x)
+digits_standardized = scaler.transform(x)
+y = digits.target
+X_train, X_test, y_train, y_test = model_selection.train_test_split(digits_standardized, y, random_state=30, stratify=y)
+
+svm_clf2 = svm.SVC()
+svm_clf2.fit(X_train, y_train)
+print(svm_clf2.score(X_test,y_test))
+
+#Write your code here
+from sklearn import datasets, cluster, metrics
+import numpy as np 
+
+iris = datasets.load_iris()
+
+km_cls = cluster.KMeans(n_clusters=3)
+
+km_cls.fit(iris.data)
+
+print(metrics.homogeneity_score(km_cls.predict(iris.data), iris.target))
+
+#Task2 
+agg_cls = cluster.AgglomerativeClustering()
+
+#agg_cls.fit(iris.data)
+print(metrics.homogeneity_score(agg_cls.fit_predict(iris.data), iris.target))
+
+#Task3
+af_cls = cluster.AffinityPropagation()
+af_cls.fit(iris.data)
+print(metrics.homogeneity_score(af_cls.predict(iris.data), iris.target))
+
+
+from sklearn import datasets, model_selection, ensemble, metrics
+
+import numpy as np 
+
+
+
+np.random.seed(100)
+
+#task 1
+
+boston = datasets.load_boston()
+
+x = boston.data
+
+y = boston.target
+
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(x, y, random_state=30)
+
+print(X_train.shape)
+
+print(X_test.shape)
+
+#task 2
+
+rf_reg = ensemble.RandomForestRegressor()
+
+rf_reg.fit(X_train, Y_train)
+
+print(rf_reg.score(X_train, Y_train))
+
+print(rf_reg.score(X_test, Y_test))
+
+print(rf_reg.predict(X_test[:2]))
+
+
+
+#task 3
+
+max_depth = range(3, 5)
+
+n_est = [50,100,200]
+
+accuracy = 0
+
+depth = 0
+
+est = 0
+
+for k in max_depth:
+
+  for j in n_est:
+
+    rf = ensemble.RandomForestRegressor(n_estimators = j, max_depth=k)
+
+    rf.fit(X_train, Y_train)
+
+    score = rf.score(X_test, Y_test)
+
+    if score > accuracy:
+
+        accuracy = score
+
+        depth = k
+
+        est = j
+
+
+
+print((depth,est))
+
+
+
+
+
+
+
